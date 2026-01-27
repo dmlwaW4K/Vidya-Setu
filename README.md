@@ -1,4 +1,4 @@
-```markdown
+
 # Vidyasetu - Bridging Educational Gaps in Northeast India
 
 <div align="center">
