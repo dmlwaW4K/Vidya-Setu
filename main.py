@@ -14,6 +14,7 @@ import os
 import csv
 from datetime import datetime
 
+
 # Android storage setup
 if platform == 'android':
     from android.storage import app_storage_path
@@ -21,15 +22,18 @@ if platform == 'android':
 else:
     STORAGE_PATH = os.path.expanduser('~')
 
+
 # Create directories
 LESSONS_DIR = os.path.join(STORAGE_PATH, 'lessons')
 AUDITS_DIR = os.path.join(STORAGE_PATH, 'audits')
 os.makedirs(LESSONS_DIR, exist_ok=True)
 os.makedirs(AUDITS_DIR, exist_ok=True)
 
+
 # Bhashini API Credentials - YOUR VALID KEYS
 ULCA_API_KEY = "C5JdA-yu4RNa5rAxrZeBtU766jEnseu9hSIU_904AFyphUbnyZgKAznCuwjOs2W6"
 UDYAT_KEY = "29e35d7d18-b7ad-4c9b-8ffa-6b9fa0dbe413"
+
 
 # Theme Colors
 PINE_GREEN = (0.004, 0.475, 0.435, 1)
@@ -175,7 +179,7 @@ class HomeScreen(Screen):
         header = Label(
             text='[b]Vidyasetu[/b]\nEducation Bridge for Meghalaya',
             font_size='28sp',
-            size_hint_y=0.25,
+            size_hint_y=0.2,
             markup=True,
             color=PINE_GREEN
         )
@@ -183,7 +187,7 @@ class HomeScreen(Screen):
         btn_tutor = Button(
             text='📚 Vernacular Tutor',
             font_size='20sp',
-            size_hint_y=0.2,
+            size_hint_y=0.18,
             background_color=PINE_GREEN,
             background_normal=''
         )
@@ -192,7 +196,7 @@ class HomeScreen(Screen):
         btn_audit = Button(
             text='🏫 Infrastructure Audit',
             font_size='20sp',
-            size_hint_y=0.2,
+            size_hint_y=0.18,
             background_color=ACCENT_COLOR,
             background_normal=''
         )
@@ -201,16 +205,25 @@ class HomeScreen(Screen):
         btn_lessons = Button(
             text='💾 Offline Lessons',
             font_size='20sp',
-            size_hint_y=0.2,
+            size_hint_y=0.18,
             background_color=(0.3, 0.3, 0.3, 1),
             background_normal=''
         )
         btn_lessons.bind(on_press=self.go_to_lessons)
         
+        btn_privacy = Button(
+            text='🔒 Privacy Policy',
+            font_size='16sp',
+            size_hint_y=0.15,
+            background_color=(0.5, 0.5, 0.5, 1),
+            background_normal=''
+        )
+        btn_privacy.bind(on_press=self.go_to_privacy)
+        
         info = Label(
-            text='AI-powered education for NE India',
-            size_hint_y=0.1,
-            font_size='14sp',
+            text='AI-powered education for NE India\nDPDP Act 2023 Compliant',
+            size_hint_y=0.11,
+            font_size='13sp',
             color=(0.5, 0.5, 0.5, 1)
         )
         
@@ -218,6 +231,7 @@ class HomeScreen(Screen):
         layout.add_widget(btn_tutor)
         layout.add_widget(btn_audit)
         layout.add_widget(btn_lessons)
+        layout.add_widget(btn_privacy)
         layout.add_widget(info)
         
         self.add_widget(layout)
@@ -230,6 +244,9 @@ class HomeScreen(Screen):
     
     def go_to_lessons(self, instance):
         self.manager.current = 'lessons'
+    
+    def go_to_privacy(self, instance):
+        self.manager.current = 'privacy'
 
 
 class TutorScreen(Screen):
@@ -536,6 +553,98 @@ class LessonsScreen(Screen):
             self.lessons_grid.add_widget(error_label)
 
 
+class PrivacyScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
+        # Header
+        header = BoxLayout(size_hint_y=0.08)
+        back_btn = Button(text='← Back', size_hint_x=0.3, background_color=PINE_GREEN)
+        back_btn.bind(on_press=lambda x: setattr(self.manager, 'current', 'home'))
+        title = Label(text='Privacy Policy', font_size='22sp', bold=True)
+        header.add_widget(back_btn)
+        header.add_widget(title)
+        
+        # Scrollable privacy text
+        scroll = ScrollView(size_hint=(1, 0.92))
+        
+        privacy_content = BoxLayout(orientation='vertical', size_hint_y=None, padding=15, spacing=10)
+        privacy_content.bind(minimum_height=privacy_content.setter('height'))
+        
+        # Add white background
+        with privacy_content.canvas.before:
+            Color(1, 1, 1, 1)
+            self.privacy_bg = Rectangle(pos=privacy_content.pos, size=privacy_content.size)
+        privacy_content.bind(pos=lambda obj, val: setattr(self.privacy_bg, 'pos', val))
+        privacy_content.bind(size=lambda obj, val: setattr(self.privacy_bg, 'size', val))
+        
+        privacy_text = Label(
+            text='[b]Vidyasetu Privacy Policy[/b]\n\n'
+                 '[b]DPDP Act 2023 Compliant[/b]\n\n'
+                 '[b]Data Collection:[/b]\n'
+                 '• No personal information collected\n'
+                 '• No names, emails, or phone numbers\n'
+                 '• No user accounts required\n'
+                 '• No behavioral tracking\n\n'
+                 '[b]Data Storage:[/b]\n'
+                 '• All data stored locally on your device\n'
+                 '• Lessons saved as JSON files\n'
+                 '• Audit reports saved as CSV files\n'
+                 '• No cloud backup or transmission\n'
+                 '• You control your data completely\n\n'
+                 '[b]API Usage (Bhashini):[/b]\n'
+                 '• Translation text sent to Bhashini API\n'
+                 '• No user identification sent\n'
+                 '• Temporary processing only\n'
+                 '• Not stored on API servers\n'
+                 '• Government of India service\n\n'
+                 '[b]Your Rights:[/b]\n'
+                 '• Right to Access: View all saved data in app\n'
+                 '• Right to Delete: Clear app data in Android settings\n'
+                 '• Right to Control: Use offline mode anytime\n'
+                 '• Right to Export: CSV/JSON files available\n\n'
+                 '[b]Audit Reports:[/b]\n'
+                 '• Only school name and village stored\n'
+                 '• No individual personal information\n'
+                 '• Data stays on your device\n'
+                 '• Anonymous reporting system\n\n'
+                 '[b]Security:[/b]\n'
+                 '• Local storage only\n'
+                 '• No data transmission except API calls\n'
+                 '• No third-party analytics\n'
+                 '• No advertisements\n\n'
+                 '[b]Children\'s Privacy:[/b]\n'
+                 '• Designed for students of all ages\n'
+                 '• No personal data collected from minors\n'
+                 '• Safe for educational use\n\n'
+                 '[b]Contact:[/b]\n'
+                 'For questions or concerns:\n'
+                 'Email: vipin@nehu.ac.in\n\n'
+                 '[b]Updates:[/b]\n'
+                 'This policy may be updated. Check app for changes.\n\n'
+                 'Last updated: January 28, 2026\n\n'
+                 '[b]By using this app, you consent to this privacy policy.[/b]',
+            size_hint_y=None,
+            markup=True,
+            color=(0, 0, 0, 1),
+            font_size='14sp',
+            halign='left',
+            valign='top'
+        )
+        privacy_text.bind(texture_size=privacy_text.setter('size'))
+        privacy_text.bind(size=privacy_text.setter('text_size'))
+        
+        privacy_content.add_widget(privacy_text)
+        scroll.add_widget(privacy_content)
+        
+        layout.add_widget(header)
+        layout.add_widget(scroll)
+        
+        self.add_widget(layout)
+
+
 class VidyasetuApp(App):
     def build(self):
         sm = ScreenManager()
@@ -543,6 +652,7 @@ class VidyasetuApp(App):
         sm.add_widget(TutorScreen(name='tutor'))
         sm.add_widget(AuditScreen(name='audit'))
         sm.add_widget(LessonsScreen(name='lessons'))
+        sm.add_widget(PrivacyScreen(name='privacy'))
         return sm
 
 
