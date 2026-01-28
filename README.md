@@ -190,7 +190,7 @@ For questions about data handling or privacy:
 
 ### For Users (APK Download)
 
-1. Download `vidyasetu.apk` from [Releases](https://github.com/yourusername/vidyasetu/releases)
+1. Download `vidyasetu.apk` from [Releases](https://github.com/dmlwaW4K/Vidya-Setu/releases)
 2. Enable "Install from Unknown Sources" in Android settings
 3. Install APK
 4. Open Vidyasetu app
